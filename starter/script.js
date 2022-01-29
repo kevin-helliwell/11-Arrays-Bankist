@@ -62,17 +62,19 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function(movements) {
+const displayMovements = function(movements, sort = false) {
   containerMovements.innerHTML = '';
   // .textContent = 0
 
+  const movs = sort ? movements.slice().sort((a,b) => a-b) : movements;
 
-  movements.forEach(function(mov,i) {
+
+  movs.forEach(function(mov,i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `<div class="movements__row">
     <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
-    <div class="movements__value">${mov}</div>
+    <div class="movements__value">${mov}€</div>
   </div>
     `;
 
@@ -214,7 +216,14 @@ btnClose.addEventListener('click', function(e) {
 
   }
   inputCloseUsername.value = inputClosePin.value = '';
-})
+});
+
+let sorted = false;
+btnSort.addEventListener('click', function(e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
 
 
 // calcDisplaySummary(account1.movements);
@@ -579,26 +588,117 @@ GOOD LUCK 😀
 // const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 // console.log(account);
 
-console.log(movements);
+// console.log(movements);
 
-// EQUALITY
-console.log(movements.includes(-130));
+// // EQUALITY
+// console.log(movements.includes(-130));
 
-// CONDITION
-console.log(movements.some(mov => mov === -130));
+// // CONDITION
+// console.log(movements.some(mov => mov === -130));
 
-const anyDeposits = movements.some(mov => mov > 5000);
-console.log(anyDeposits);
+// const anyDeposits = movements.some(mov => mov > 5000);
+// console.log(anyDeposits);
 
-// EVERY 
-console.log(movements.every(mov => mov > 0));
-console.log(account4.movements.every(mov => mov > 0));
+// // EVERY 
+// console.log(movements.every(mov => mov > 0));
+// console.log(account4.movements.every(mov => mov > 0));
 
-// Separate callback
-const deposit = mov => mov > 0;
-console.log(movements.some(deposit));
-console.log(movements.every(deposit));
-console.log(movements.filter(deposit));
+// // Separate callback
+// const deposit = mov => mov > 0;
+// console.log(movements.some(deposit));
+// console.log(movements.every(deposit));
+// console.log(movements.filter(deposit));
+
+// .Flat
+// const arr = [[1,2,3],[4,5,6],7,8];
+// console.log(arr.flat());
+
+// const arrDeep = [[[1,2],3],[4,[5,6]],7,8];
+// console.log(arrDeep.flat(2));
+
+// // Build up
+// // const accountMovements = accounts.map(acc => acc.movements);
+// // console.log(accountMovements);
+// // const allMovements = accountMovements.flat();
+// // console.log(allMovements);
+// // const overallBalance = allMovements.reduce((acc, mov) => acc + mov,0);
+// // console.log(overallBalance);
+
+// const overallBalance = accounts.map(acc => acc.movements).flat().reduce((acc,mov) => acc + mov, 0);
+// console.log(overallBalance);
+
+// // .FlatMap
+
+// const overallBalance2 = accounts.flatMap(acc => acc.movements).reduce((acc,mov) => acc + mov, 0);
+// console.log(overallBalance2);
+
+// Sorting
+
+// Strings
+// const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+// console.log(owners.sort());
+// console.log(owners);
+
+// // Numbers
+// console.log(movements);
+// // DOES NOT WORK: console.log(movements.sort());
+
+// // return < 0, then a before b (keep order)
+// // return > 0, then b before a (switch order)
+
+// // Ascending
+// // movements.sort((a, b) => {
+// //   if (a>b) return 1;
+// //   if (a<b) return -1;
+// // });
+// movements.sort((a, b) => a-b);
+// console.log(movements);
+
+// // Descending
+// // movements.sort((a, b) => {
+// //   if (a>b) return -1;
+// //   if (a<b) return 1;
+// // });
+// movements.sort((a,b) => b-a);
+// console.log(movements);
+
+console.log([1,2,3,4,5,6,7]);
+console.log(new Array(1,2,3,4,5,6,7));
+
+const x = new Array(7);
+console.log(x);
+// DOESNT WORK: console.log(x.map(() => 5));
+// x.fill(1);
+x.fill(1,3,5);
+console.log(x);
+
+const arr = [1,2,3,4,5,6,7];
+arr.fill(23,2,6);
+console.log(arr);
+
+// Array.from
+const y = Array.from({length: 7}, () => 1);
+console.log(y);
+
+const z = Array.from({length: 7}, (_,i) => i+1);
+console.log(z);
+
+// const arrRolls = new Array(100);
+// arrRolls.fill(Math.trunc(6*Math.random()+1));
+const arrRollsFilled = Array.from({length:100}, (_,i) => Math.trunc(6*Math.random(i)+1));
+console.log(arrRollsFilled);
+
+
+
+labelBalance.addEventListener('click', function() {
+  const movementsUI = Array.from(document.querySelectorAll('.movements__value'), el => Number(el.textContent.replace('€', '')));
+  console.log(movementsUI);
+
+  // Another way to do same thing
+  const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+})
+
+
 
 
 
